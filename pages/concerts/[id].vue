@@ -1,37 +1,64 @@
 <template>
   <div>
     <NuxtLayout name="header">
-      <div class="flex justify-center items-center m-20">
-        <img :src="image" alt="" loading="lazy" class="w-full" />
+      <div :class="[mobileScreen ? '' : 'flex items-end']">
+        <div class="justify-center items-center p-10 sm:p-20 w-full sm:w-2/4">
+          <img :src="image" alt="" loading="lazy" />
+        </div>
+        <div
+          v-show="!mobileScreen"
+          class="bottom_buy w-full flex items-center bottom-0 relative h-fit"
+        >
+          <p class="w-2/5">Price {{ mintText }}</p>
+
+          <button class="buy_button w-4/5">Buy now</button>
+        </div>
       </div>
+
       <div class="p-10" v-html="htmlContent"></div>
 
-      <div class="bg-black absolute p-3 flex justify-between items-center">
+      <div class="container">google : {{ x }}, {{ y }}</div>
+
+      <div
+        v-show="mobileScreen"
+        class="bg-black absolute p-3 flex justify-between items-center"
+      >
         <p class="w-2/5">Price {{ mintText }}</p>
 
-        <button class="buy_button w-4/5">Buy now</button>
+        <button @click="buyNow" class="buy_button w-4/5">Buy now</button>
       </div>
+      <login-popup v-show="loading" />
     </NuxtLayout>
   </div>
 </template>
 
 <script setup>
+import { loadingKey } from "~~/key_injector";
+
+const { loading, setLoading } = inject(loadingKey);
+
+const { mobileScreen } = useCheckMobileScreen();
+const { x, y } = useMouse();
 const state = reactive({ data: {} });
 const route = useRoute();
 const concertId = route.params.id;
 const image = ref("");
 const mintText = ref("");
 const htmlContent = ref("");
+const watchRef = ref("");
+const showLoginPopup = ref(false);
 
-// definePageMeta({
-//   validate: async (route) => {
-//     const nuxtApp = useNuxtApp();
-//     // Check if the id is made up of digits
-//     return /^\d+$/.test(route.params.id);
-//   },
-// });
-
+watch(watchRef, (ref) => {
+  console.log("watchRef" + ref);
+  alert(ref);
+});
 watchEffect(fetchData);
+
+function buyNow() {
+  watchRef.value = Date();
+  setLoading(true);
+  // showLoginPopup.value = true;
+}
 
 async function fetchData() {
   try {
@@ -57,8 +84,6 @@ async function fetchData() {
 
     if (error.value) {
     }
-
-    loading.value = pending.value;
   } catch (error) {}
 }
 </script>
@@ -72,11 +97,20 @@ div.absolute {
   background-color: white;
   position: sticky;
   bottom: 0;
-  height: 100px;
+  height: 5.5em;
   box-shadow: 30px 30px 50px 5px #1a1515;
   border: 5px solid whitesmoke;
   border-top-left-radius: 3em;
   border-top-right-radius: 3em;
+}
+
+div.bottom_buy {
+  background-color: white;
+  position: sticky;
+  bottom: 0;
+  height: 100px;
+  border: 5px solid whitesmoke;
+  border-radius: 3em;
 }
 .container {
   height: 200px;

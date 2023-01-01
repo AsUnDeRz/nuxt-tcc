@@ -1,15 +1,10 @@
 <template>
   <div>
     <div class="flex font-sans">
-      <div class="flex-none w-48 relative">
-        <img
-          :src="image"
-          alt=""
-          class="absolute inset-0 w-full h-full object-cover"
-          loading="lazy"
-        />
+      <div class="m:w-25 w-40">
+        <img :src="image" alt="" class="object-cover" loading="lazy" />
       </div>
-      <form class="flex-auto p-6">
+      <form class="flex-1 p-6">
         <div class="flex flex-wrap">
           <h1 class="flex-auto text-lg font-semibold text-slate-900">
             {{ props.model.name }}
@@ -112,3 +107,9 @@
 const props = defineProps(["model"]);
 const image = props.model.images[0].url;
 </script>
+
+<style scoped>
+img {
+  aspect-ratio: 0.75;
+}
+</style>

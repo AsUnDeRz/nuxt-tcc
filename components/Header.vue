@@ -12,7 +12,7 @@
 .header {
   background-color: white;
   top: 0;
-  height: 100px;
+  height: 5em;
   box-shadow: 5px 5px 10px 5px whitesmoke;
   border: 10x solid whitesmoke;
   border-bottom-left-radius: 3em;
